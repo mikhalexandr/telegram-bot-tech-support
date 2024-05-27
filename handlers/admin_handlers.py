@@ -3,6 +3,7 @@ from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import Message
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
+
 from filters import AdminFilter
 from states import AdminStates
 from keyboards import (admin_keyboard, cancel_keyboard, change_default_questions_keyboard, all_questions_keyboard,
@@ -12,8 +13,9 @@ from data.moderators import Moderator
 from data.uncommited_moderators import UncommitedModerator
 from data.comments_and_suggestions import Suggestion
 from data.message_id import MessageId
-from utils import format_default_questions, format_with_author, format_moderators
-import config
+from misc import format_default_questions, format_with_author, format_moderators
+import consts
+
 
 router = Router()
 router.message.filter(AdminFilter())
@@ -71,10 +73,10 @@ async def add_moderator(message: Message, state: FSMContext, bot: Bot):
 
 @router.message(F.text, AdminStates.changing_greeting)
 async def change_greeting(message: Message, state: FSMContext):
-    config.GREETING = message.text
+    consts.GREETING = message.text
     await state.clear()
     await message.answer(f"""Приветствие успешно изменено на:
-<b>{config.GREETING}</b>""", reply_markup=admin_keyboard())
+<b>{consts.GREETING}</b>""", reply_markup=admin_keyboard())
 
 
 @router.message(F.text == "Удалить модератора", AdminStates.watching_moderators)
@@ -168,7 +170,7 @@ async def control_moderators(message: Message, state: FSMContext):
 async def change_greeting_request(message: Message, state: FSMContext):
     await state.set_state(AdminStates.changing_greeting)
     await message.answer(f"""Пожалуйста, пришлите новый текст приветствия! Сейчас оно выглядит так:
-<b>{config.GREETING}</b>""", reply_markup=cancel_keyboard())
+<b>{consts.GREETING}</b>""", reply_markup=cancel_keyboard())
 
 
 @router.message(F.text == "Изменить вопросы по умолчанию")

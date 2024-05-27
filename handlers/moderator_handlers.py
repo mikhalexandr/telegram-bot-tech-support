@@ -3,6 +3,7 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.utils.formatting import Pre, Text, Underline
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
+
 from data import db_session
 from data.moderators import Moderator
 from data.questions import Question
@@ -11,7 +12,8 @@ from data.uncommited_moderators import UncommitedModerator
 from filters import ModeratorFilter, UncommitedModeratorFilter
 from states import ModeratorStates
 from keyboards import cancel_keyboard, moderator_answer_keyboard, all_questions_keyboard
-from utils import format_with_author
+from misc import format_with_author
+
 
 router = Router()
 

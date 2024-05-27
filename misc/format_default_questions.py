@@ -1,4 +1,4 @@
-from config import QUESTIONS
+from consts import QUESTIONS
 
 
 def format_default_questions():

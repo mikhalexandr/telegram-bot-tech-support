@@ -3,6 +3,7 @@ from aiogram.types import Message
 from aiogram.filters import Command
 from aiogram.utils.formatting import Pre, Text, Underline
 from aiogram.fsm.context import FSMContext
+
 from keyboards import faq_keyboard, cancel_keyboard, moderator_answer_keyboard
 from states import UserStates
 from data import db_session
@@ -10,15 +11,16 @@ from data.questions import Question
 from data.message_id import MessageId
 from data.moderators import Moderator
 from data.comments_and_suggestions import Suggestion
-from utils import format_default_questions, format_with_author
-import config
+from misc import format_default_questions, format_with_author
+import consts
+
 
 router = Router()
 
 
 @router.message(Command("start"))
 async def start(message: Message):
-    await message.answer(config.GREETING, reply_markup=faq_keyboard())
+    await message.answer(consts.GREETING, reply_markup=faq_keyboard())
 
 
 @router.message(F.text == "Отмена")
@@ -65,7 +67,7 @@ async def get_suggestion(message: Message, state: FSMContext, bot: Bot):
     session.add(s)
     session.commit()
     await state.clear()
-    await bot.send_message(config.ADMIN_ID, f"Добавлен новый отзыв! Текущее количество: {s.id}")
+    await bot.send_message(consts.ADMIN_ID, f"Добавлен новый отзыв! Текущее количество: {s.id}")
     await message.answer("Огромное спасибо за ваш отзыв. Мы будем стараться совершенствоваться ради вас!",
                          reply_markup=faq_keyboard())
 
