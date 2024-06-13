@@ -1,4 +1,4 @@
-# Telagram-bot Tech Support
+# Telegram-bot Tech Support
 
 Telegram-bot that implements the function of technical support and feedback. Сan be used for absolutely any project, has an admin panel, moderators and interaction with users
 
