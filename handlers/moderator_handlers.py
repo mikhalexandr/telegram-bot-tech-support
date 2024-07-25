@@ -27,7 +27,7 @@ async def start(message: Message):
     session.add(moder)
     session.commit()
     await message.answer(
-        "Здравствуйте! Вы были назначены модератором хакатона. Вы можете отвечать на вопросы пользователей.",
+        "Здравствуйте! Вы были назначены модератором [имя сервиса]. Вы можете отвечать на вопросы пользователей.",
         reply_markup=all_questions_keyboard())
 
 
@@ -38,7 +38,7 @@ async def start(message: Message):
     m.name = message.from_user.first_name
     session.commit()
     await message.answer(
-        "Здравствуйте! Вы были назначены модератором хакатона. Вы можете отвечать на вопросы пользователей.",
+        "Здравствуйте! Вы были назначены модератором [имя сервиса]. Вы можете отвечать на вопросы пользователей.",
         reply_markup=all_questions_keyboard())
 
 
@@ -49,7 +49,7 @@ async def add_moderator_cancel(message: Message, state: FSMContext, bot: Bot):
         await bot.delete_message(message.from_user.id, msg_id)
     await message.delete()
     await state.clear()
-    await message.answer("Будьте готовы отвечать на вопросы участников хакатона!",
+    await message.answer("Будьте готовы отвечать на вопросы участников [имя сервиса]!",
                          reply_markup=all_questions_keyboard())
 
 
@@ -65,7 +65,7 @@ async def add_moderator_cancel(message: Message):
             session.add(message_id)
             session.commit()
     else:
-        await message.answer("В настоящий момент у участников хакатона нет к вам вопросов",
+        await message.answer("В настоящий момент у участников [имя сервиса] нет к вам вопросов",
                              reply_markup=all_questions_keyboard())
 
 

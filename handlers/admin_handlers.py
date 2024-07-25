@@ -14,7 +14,7 @@ from data.uncommited_moderators import UncommitedModerator
 from data.comments_and_suggestions import Suggestion
 from data.message_id import MessageId
 from misc import format_default_questions, format_with_author, format_moderators
-import consts
+from config import TelegramTexts
 
 
 router = Router()
@@ -23,7 +23,8 @@ router.message.filter(AdminFilter())
 
 @router.message(Command("start"))
 async def start(message: Message):
-    await message.answer("Приветствую! Я помогу вам в организации хакатона. Сейчас вы можете добавить модераторов, "
+    await message.answer("Приветствую! Я помогу вам в организации [имя сервиса]. "
+                         "Сейчас вы можете добавить модераторов, "
                          "которые будут отвечать на вопросы, задаваемые участниками, изменить приветствие "
                          "участников или настроить вопросы по умолчанию и ответы на них.",
                          reply_markup=admin_keyboard())
@@ -73,10 +74,10 @@ async def add_moderator(message: Message, state: FSMContext, bot: Bot):
 
 @router.message(F.text, AdminStates.changing_greeting)
 async def change_greeting(message: Message, state: FSMContext):
-    consts.GREETING = message.text
+    TelegramTexts.GREETING = message.text
     await state.clear()
     await message.answer(f"""Приветствие успешно изменено на:
-<b>{consts.GREETING}</b>""", reply_markup=admin_keyboard())
+<b>{TelegramTexts.GREETING}</b>""", reply_markup=admin_keyboard())
 
 
 @router.message(F.text == "Удалить модератора", AdminStates.watching_moderators)
@@ -170,7 +171,7 @@ async def control_moderators(message: Message, state: FSMContext):
 async def change_greeting_request(message: Message, state: FSMContext):
     await state.set_state(AdminStates.changing_greeting)
     await message.answer(f"""Пожалуйста, пришлите новый текст приветствия! Сейчас оно выглядит так:
-<b>{consts.GREETING}</b>""", reply_markup=cancel_keyboard())
+<b>{TelegramTexts.GREETING}</b>""", reply_markup=cancel_keyboard())
 
 
 @router.message(F.text == "Изменить вопросы по умолчанию")

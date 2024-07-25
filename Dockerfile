@@ -1,7 +1,9 @@
 FROM python:3.11
+
 WORKDIR /main
 
 COPY requirements.txt .
+
 RUN pip3 install --upgrade pip
 RUN pip install -r requirements.txt
 

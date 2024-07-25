@@ -11,4 +11,7 @@ class Question(SqlAlchemyBase):
     sender = sqlalchemy.Column(sqlalchemy.Integer)
     sender_name = sqlalchemy.Column(sqlalchemy.String)
     moderator = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("moderators.id"))
-    message_ids = sqlalchemy.orm.relationship("MessageId")
+
+    message_ids = sqlalchemy.orm.relationship(
+        "MessageId"
+    )

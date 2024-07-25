@@ -4,7 +4,7 @@ from data.uncommited_moderators import UncommitedModerator
 
 
 def format_moderators():
-    res = "Модераторы хакатона:\n"
+    res = "Модераторы [имя сервиса]:\n"
     session = db_session.create_session()
     true_moderators = session.query(Moderator).all()
     uncommited_moderators = session.query(UncommitedModerator).all()

@@ -6,7 +6,7 @@ from filters import AdminFilter
 from states import AdminStates
 from keyboards import cancel_keyboard, change_default_questions_keyboard
 from misc import format_default_questions
-import consts
+from config import TelegramTexts
 
 
 router = Router()
@@ -15,7 +15,7 @@ router.message.filter(AdminFilter())
 
 @router.message(F.text == "Изменить ответы", AdminStates.default_answers_questions)
 async def f(message: Message, state: FSMContext):
-    if consts.QUESTIONS:
+    if TelegramTexts.QUESTIONS:
         await message.answer("Укажите номер вопроса, ответ на который вы желаете изменить",
                              reply_markup=cancel_keyboard())
         await state.set_state(AdminStates.change_questions)
@@ -26,7 +26,7 @@ async def f(message: Message, state: FSMContext):
 @router.message(F.text.isdigit(), AdminStates.change_questions)
 async def f(message: Message, state: FSMContext):
     num = int(message.text)
-    if num > len(consts.QUESTIONS):
+    if num > len(TelegramTexts.QUESTIONS):
         await message.answer("Пожалуйста, введите существующее число!", reply_markup=cancel_keyboard())
     else:
         await message.answer("Введите новый ответ на вопрос",
@@ -38,9 +38,9 @@ async def f(message: Message, state: FSMContext):
 @router.message(F.text, AdminStates.editing_question)
 async def f(message: Message, state: FSMContext):
     num = (await state.get_data())["num"]
-    for n, q in enumerate(consts.QUESTIONS):
+    for n, q in enumerate(TelegramTexts.QUESTIONS):
         if n == num:
-            consts.QUESTIONS[q] = message.text
+            TelegramTexts.QUESTIONS[q] = message.text
             break
     await message.answer("Успешно! Теперь вопросы выглядят так:")
     await state.set_data({})
@@ -57,7 +57,7 @@ async def f(message: Message, state: FSMContext):
 
 @router.message(F.text, AdminStates.adding_question)
 async def f(message: Message, state: FSMContext):
-    if message.text not in consts.QUESTIONS:
+    if message.text not in TelegramTexts.QUESTIONS:
         await message.answer("Введите ответ на него", reply_markup=cancel_keyboard())
         await state.set_state(AdminStates.adding_answer)
         await state.update_data(question=message.text)
@@ -69,7 +69,7 @@ async def f(message: Message, state: FSMContext):
 @router.message(F.text, AdminStates.adding_answer)
 async def f(message: Message, state: FSMContext):
     q = (await state.get_data())["question"]
-    consts.QUESTIONS[q] = message.text
+    TelegramTexts.QUESTIONS[q] = message.text
     await message.answer("Успешно! Теперь вопросы выглядят так:")
     await state.set_data({})
     await state.set_state(AdminStates.default_answers_questions)
@@ -78,7 +78,7 @@ async def f(message: Message, state: FSMContext):
 
 @router.message(F.text == "Удалить вопрос", AdminStates.default_answers_questions)
 async def f(message: Message, state: FSMContext):
-    if consts.QUESTIONS:
+    if TelegramTexts.QUESTIONS:
         await message.answer("Укажите номер вопроса, который вы желаете удалить", reply_markup=cancel_keyboard())
         await state.set_state(AdminStates.deleting_question)
     else:
@@ -88,12 +88,12 @@ async def f(message: Message, state: FSMContext):
 @router.message(F.text.isdigit(), AdminStates.deleting_question)
 async def f(message: Message, state: FSMContext):
     num = int(message.text)
-    if num > len(consts.QUESTIONS):
+    if num > len(TelegramTexts.QUESTIONS):
         await message.answer("Пожалуйста, введите существующее число!", reply_markup=cancel_keyboard())
     else:
-        for n, q in enumerate(consts.QUESTIONS):
+        for n, q in enumerate(TelegramTexts.QUESTIONS):
             if n == num - 1:
-                del consts.QUESTIONS[q]
+                del TelegramTexts.QUESTIONS[q]
                 break
         await message.answer("Успешно! Теперь вопросы выглядят так:")
         await state.set_data({})

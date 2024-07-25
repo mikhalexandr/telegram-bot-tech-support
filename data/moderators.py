@@ -9,4 +9,7 @@ class Moderator(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     user_id = sqlalchemy.Column(sqlalchemy.Integer)
     name = sqlalchemy.Column(sqlalchemy.String, default="Moder")
-    questions = sqlalchemy.orm.relationship("Question")
+
+    questions = sqlalchemy.orm.relationship(
+        "Question"
+    )

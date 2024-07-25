@@ -12,7 +12,7 @@ from data.message_id import MessageId
 from data.moderators import Moderator
 from data.comments_and_suggestions import Suggestion
 from misc import format_default_questions, format_with_author
-import consts
+from config import TelegramConfig, TelegramTexts
 
 
 router = Router()
@@ -20,7 +20,7 @@ router = Router()
 
 @router.message(Command("start"))
 async def start(message: Message):
-    await message.answer(consts.GREETING, reply_markup=faq_keyboard())
+    await message.answer(TelegramTexts.GREETING, reply_markup=faq_keyboard())
 
 
 @router.message(F.text == "Отмена")
@@ -67,7 +67,7 @@ async def get_suggestion(message: Message, state: FSMContext, bot: Bot):
     session.add(s)
     session.commit()
     await state.clear()
-    await bot.send_message(consts.ADMIN_ID, f"Добавлен новый отзыв! Текущее количество: {s.id}")
+    await bot.send_message(TelegramConfig.ADMIN_ID, f"Добавлен новый отзыв! Текущее количество: {s.id}")
     await message.answer("Огромное спасибо за ваш отзыв. Мы будем стараться совершенствоваться ради вас!",
                          reply_markup=faq_keyboard())
 
@@ -87,7 +87,7 @@ async def ask_question(message: Message, state: FSMContext):
 @router.message(F.text == "Поделиться впечатлениями с нами")
 async def vote(message: Message, state: FSMContext):
     await message.answer(
-        "Пожалуйста, расскажите о вашем впечатлении от нашего хакатона. Что понравилось, что не очень,"
+        "Пожалуйста, расскажите о вашем впечатлении от [имя сервиса]. Что понравилось, что не очень,"
         " а что было бы неплохо добавить. Ваш отзыв очень важен для нас, ведь вы с каждым днем делаете нас лучше:)",
         reply_markup=cancel_keyboard())
     await state.set_state(UserStates.voting)
