@@ -1,5 +1,4 @@
 .idea
 .venv
 
-.env
-db
+config/*.env*
